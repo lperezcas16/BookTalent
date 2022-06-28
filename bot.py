@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from itertools import zip_longest
 from os import getenv
 from selenium import webdriver
 from time import sleep
@@ -30,37 +31,64 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 wait = WebDriverWait(driver, 15)
 driver.get('https://www.linkedin.com')
-print(driver.title)
-username = driver.find_element(By.ID, 'session_key')
+
+username = driver.find_element(By.NAME, 'session_key')
 username.send_keys(username_env)
-password = driver.find_element(By.ID, 'session_password')
+password = driver.find_element(By.NAME, 'session_password')
 password.send_keys(password_env)
 log_in_button = driver.find_element(By.CLASS_NAME, 'sign-in-form__submit-button')
 log_in_button.click()
 
 
 driver.get(linkedin_urls)
+### NAME
 name_xpath = "//h1[@class='text-heading-xlarge inline t-24 v-align-middle break-words']"
 condition_name = EC.presence_of_element_located((By.XPATH, name_xpath))
-
 name = wait.until(condition_name).text
-print(name)
 
+### COUNTRY
+country_xpath = '/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[2]/div[2]/span[1]'
+condition_xp_country =  EC.presence_of_element_located((By.XPATH, country_xpath))
+country = wait.until(condition_xp_country).text
+
+### SCROLL
 driver.execute_script("window.scrollBy(0, 1200)","")
 
+### EXPERIENCE
+
+####TITLE
 xp_xpath_title = "/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[4]/div[3]/ul/li/div/div[2]/div/div/div/span/span[1]"
 condition_xp_title =  EC.presence_of_element_located((By.XPATH, xp_xpath_title))
 experience = wait.until(condition_xp_title)
 experience = experience.find_elements(By.XPATH, xp_xpath_title)
 xp_title = [x.get_attribute("textContent") for x in experience]
-print(xp_title)
-xp_xpath_company = "/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[4]/div[3]/ul/li/div/div[2]/div/div/div/span/span[1]"
-#xp_xpath_company = "/html/body/main/section[1]/div/section/section[3]/div/ul/li/div/h4/a"
+
+#### COMPANY
+xp_xpath_company = '/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[4]/div[3]/ul/li/div/div[2]/div/div/span[1]/span[1]'
 condition_xp_company = EC.presence_of_element_located((By.XPATH, xp_xpath_company))
 companies = wait.until(condition_xp_company)
 companies = companies.find_elements(By.XPATH, xp_xpath_company)
-xp_company = [x.get_attribute("innerText") for x in companies]
-print(xp_company)
+xp_company = [x.get_attribute("textContent") for x in companies]
+#print(xp_company)
+####  TIME IN COMPANY
+xp_xpath_time = '/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[4]/div[3]/ul/li/div/div[2]/div/div/span[2]/span[1]'
+condition_xp_time = EC.presence_of_element_located((By.XPATH, xp_xpath_time))
+time = wait.until(condition_xp_time)
+time = time.find_elements(By.XPATH, xp_xpath_time)
+xp_time = [x.get_attribute("textContent") for x in time]
+
+data = {}
+keys1 = ['title', 'company', 'Time']
+zipped = list(zip_longest(xp_title, xp_company, xp_time))
+        
+
+for key in zipped:
+    experience = list(key)
+    print(experience)
+
+print("**********************************************************")
+for value in experience:
+    print(value)
 
 driver.close()
 
