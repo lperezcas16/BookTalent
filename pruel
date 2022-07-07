@@ -1,0 +1,15 @@
+
+HR Analyst & Data Scientist
+['Español', 'Francés', 'Ingles']
+> \\wsl$\ubuntu-22.04\home\lperezcas\holberton\booktalent\bot.py(122)<module>()
+-> str_languajes = "".join(languajes)
+(Pdb) > \\wsl$\ubuntu-22.04\home\lperezcas\holberton\booktalent\bot.py(123)<module>()
+-> print(str_languajes)
+(Pdb) <class 'str'>
+(Pdb) EspañolFrancésIngles
+(Pdb) (Pdb) 'E s p a ñ o l F r a n c é s I n g l e s'
+(Pdb) (Pdb) 'EspañolFrancésIngles'
+(Pdb) (Pdb) 'Español Francés Ingles'
+(Pdb) <class 'str'>
+(Pdb) 'Español Francés Ingles'
+(Pdb) 
